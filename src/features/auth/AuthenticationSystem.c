@@ -3,10 +3,21 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "auth/AuthenticationSystem.h"
 #include "globals.h"
 
 User user;
+int isValidPassword(char *password) {
+    int len = strlen(password);
+    if (len < 8) return 0;
+    int hasAlpha = 0, hasDigit = 0;
+    for (int i = 0; i < len; i++) {
+        if (isalpha(password[i])) hasAlpha = 1;
+        else if (isdigit(password[i])) hasDigit = 1;
+    }
+    return hasAlpha && hasDigit;
+}
 
 bool signIn()
 {
@@ -17,7 +28,6 @@ bool signIn()
     scanf("%20s", user.username);
     printf("Enter password: ");
     scanf("%64s", user.password);
-
     FILE *fp = fopen("data/users/users.dat", "a+");
 
     if (fp == NULL)
@@ -45,8 +55,20 @@ bool signUp()
     printf("-------\n");
     printf("Enter username (without spaces): ");
     scanf("%20s", user.username);
+    char confirmPassword[65];
     printf("Enter password: ");
     scanf("%64s", user.password);
+    printf("Confirm password: ");
+    scanf("%64s", confirmPassword);
+    if (strcmp(user.password, confirmPassword) != 0) {
+        printf("Passwords do not match!\n");
+        return false;
+    }
+    if(isValidPassword(user.password) == 0) {
+        printf("Password must be at least 8 characters long and contain both letters and digits.\n");
+        return false;
+    }
+
     FILE *fp = fopen("data/users/users.dat", "a");
     if (fp == NULL)
     {

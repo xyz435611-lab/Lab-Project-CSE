@@ -27,7 +27,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	@echo "Linking $(TARGET)..."
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
-	rm -f $(OBJS)
+#rm -f $(OBJS)
 	@echo "Build complete! Run with ./${TARGET}"
 
 # Generic rule to compile .c files to .o files
@@ -39,9 +39,9 @@ $(TARGET): $(OBJS)
 # Clean target to remove generated files
 clean:
 	@echo "Cleaning up..."
-	# Use 'find' and 'xargs rm' for Unix/Linux/WSL compatibility
-	rm -f $(OBJS) $(TARGET)
-	# Original Windows/DOS command for clean target
-	#-del /Q $(subst /,\,$(OBJS)) $(TARGET) $(TARGET).exe 2>NULL
+# Use 'find' and 'xargs rm' for Unix/Linux/WSL compatibility
+#rm -f $(OBJS) $(TARGET)
+# Original Windows/DOS command for clean target
+	-del /Q $(subst /,\,$(OBJS)) $(TARGET) $(TARGET).exe 2>nul
 # Phony targets (targets that aren't actual files)
 .PHONY: all clean
